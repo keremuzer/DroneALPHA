@@ -2,20 +2,22 @@
 #define MAP_H
 
 #include <string>
+#include <iostream>
 
-const int MAX_SIZE = 0;  // TO DO: Define maximum number of provinces considering the problem at hand
+const int MAX_SIZE = 81; // TO DO: Define maximum number of provinces considering the problem at hand
 
-class Map {
+class Map
+{
 
 public:
-
-    int distanceMatrix;      // TO DO: Define 2D distance matrix between provinces
-    bool visited[MAX_SIZE];  // Tracks visited provinces
+    // TO DO: Define 2D distance matrix between provinces
+    int distanceMatrix[MAX_SIZE][MAX_SIZE];
+    bool visited[MAX_SIZE]; // Tracks visited provinces
 
     Map(); // Constructor to initialize the map
 
     // Loads distance data from an Excel file (or predefined format) and fills the distanceMatrix
-    void loadDistanceData(const std::string& filename);
+    void loadDistanceData(const std::string &filename);
 
     // Checks if the distance between two provinces is within the allowed maxDistance range
     bool isWithinRange(int provinceA, int provinceB, int maxDistance) const;
@@ -30,7 +32,7 @@ public:
     void resetVisited();
 
     // Returns the count of visited provinces
-    int countVisitedProvinces() const;  
+    int countVisitedProvinces() const;
 
     // Function to get the distance between two provinces
     int getDistance(int provinceA, int provinceB) const;
