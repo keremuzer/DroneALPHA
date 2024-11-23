@@ -27,6 +27,7 @@ int Stack::pop()
     {
         return data[top--];
     }
+    return -1;
 }
 
 // Returns the top province without removing it
