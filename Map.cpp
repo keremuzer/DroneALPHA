@@ -47,7 +47,7 @@ void Map::loadDistanceData(const std::string &filename)
 bool Map::isWithinRange(int provinceA, int provinceB, int maxDistance) const
 {
     // TODO: Your code here
-    return false;
+    return distanceMatrix[provinceA][provinceB] <= maxDistance;
 }
 
 // Marks a province as visited
