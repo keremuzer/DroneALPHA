@@ -109,8 +109,12 @@ void RoutePlanner::exploreFromProvince(int province)
     while (!queue.isEmpty())
     {
         int nextProvince = queue.dequeue();
-        if (!map.isVisited(nextProvince) && map.isWithinRange(province, nextProvince, maxDistance) && !isWeatherRestricted(nextProvince))
+        if (!map.isVisited(nextProvince) && map.isWithinRange(province, nextProvince, maxDistance))
         {
+            if (isWeatherRestricted(nextProvince))
+            {
+                std::cout << "Province " << cities[nextProvince] << " is weather-restricted. Skipping.\n";
+            }
             map.markAsVisited(nextProvince);
             stack.push(nextProvince);
             route.push_back(nextProvince);
@@ -170,8 +174,48 @@ void RoutePlanner::displayResults() const
 {
     // TODO: Your code here
     // Display "Journey Completed!" message
+    std::cout << "----------------------------" << std::endl
+              << "Journey Completed!" << std::endl
+              << "----------------------------" << std::endl;
     // Display the total number of provinces visited
+    std::cout << "Total Number of Provinces Visited: " << route.size() << std::endl;
     // Display the total distance covered
+    std::cout << "Total Distance Covered: " << totalDistanceCovered << " km" << std::endl;
     // Display the route in the order visited
+    std::cout << "Route Taken: " << std::endl;
+    for (int i = 0; i < route.size(); i++)
+    {
+        std::cout << cities[route[i]];
+        if (i != route.size() - 1)
+        {
+            std::cout << " -> ";
+        }
+    }
+    std::cout << std::endl
+              << std::endl;
     // Priority Province Summary
+    int priorityProvincesVisited = 0;
+    std::cout << "Priority Provinces Status: " << std::endl;
+    for (int i = 0; i < numPriorityProvinces; i++)
+    {
+        if (map.isVisited(priorityProvinces[i]))
+        {
+            std::cout << "- " << cities[priorityProvinces[i]] << " (" << "Visited" << ")" << std::endl;
+            priorityProvincesVisited++;
+        }
+        else
+        {
+            std::cout << "- " << cities[priorityProvinces[i]] << " (" << "Not Visited" << ")" << std::endl;
+        }
+    }
+    std::cout << std::endl
+              << "Total Priority Provinces Visited: " << priorityProvincesVisited << " out of " << numPriorityProvinces << std::endl;
+    if (priorityProvincesVisited == numPriorityProvinces)
+    {
+        std::cout << "Success: All priority provinces were visited." << std::endl;
+    }
+    else
+    {
+        std::cout << "Warning: Not all priority provinces were visited." << std::endl;
+    }
 }
