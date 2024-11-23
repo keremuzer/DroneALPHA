@@ -54,12 +54,20 @@ bool Map::isWithinRange(int provinceA, int provinceB, int maxDistance) const
 void Map::markAsVisited(int province)
 {
     // TODO: Your code here
+    visited[province] = true;
 }
 
 // Checks if a province has already been visited
 bool Map::isVisited(int province) const
 {
     // TODO: Your code here
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        if (visited[i] == true)
+        {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -67,18 +75,30 @@ bool Map::isVisited(int province) const
 void Map::resetVisited()
 {
     // TODO: Your code here
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        visited[i] = false;
+    }
 }
 
 // Function to count the number of visited provinces
 int Map::countVisitedProvinces() const
 {
     // TODO: Your code here
-    return 0;
+    int count = 0;
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        if (visited[i] == true)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 
 // Function to get the distance between two provinces
 int Map::getDistance(int provinceA, int provinceB) const
 {
     // TODO: Your code here
-    return 0;
+    return distanceMatrix[provinceA][provinceB];
 }
