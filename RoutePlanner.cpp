@@ -18,13 +18,17 @@ const std::string cities[81] = {
 RoutePlanner::RoutePlanner(const std::string &distance_data, const std::string &priority_data, const std::string &restricted_data, int maxDistance)
     : maxDistance(maxDistance), totalDistanceCovered(0), numPriorityProvinces(0), numWeatherRestrictedProvinces(0)
 {
-
     // TO DO:
     // Load map data from file
     // Mark all provinces as unvisited initially
+    map = Map();
+    map.loadDistanceData(distance_data);
 
     // Load priority provinces
+    loadPriorityProvinces(priority_data);
+
     // Load restricted provinces
+    loadWeatherRestrictedProvinces(restricted_data);
 }
 
 // Load priority provinces from txt file to an array of indices
@@ -91,28 +95,74 @@ bool RoutePlanner::isWeatherRestricted(int province) const
 void RoutePlanner::exploreRoute(int startingCity)
 {
     // TODO: Your code here
+    map.visited[startingCity] = true;
+    stack.push(startingCity);
+    route.push_back(startingCity);
+    exploreFromProvince(startingCity);
 }
 
 // Helper function to explore from a specific province
 void RoutePlanner::exploreFromProvince(int province)
 {
     // TODO: Your code here
+    enqueueNeighbors(province);
+    while (!queue.isEmpty())
+    {
+        int nextProvince = queue.dequeue();
+        if (!map.isVisited(nextProvince) && map.isWithinRange(province, nextProvince, maxDistance) && !isWeatherRestricted(nextProvince))
+        {
+            map.markAsVisited(nextProvince);
+            stack.push(nextProvince);
+            route.push_back(nextProvince);
+            totalDistanceCovered += map.getDistance(province, nextProvince);
+            exploreFromProvince(nextProvince);
+        }
+    }
+    stack.pop();
+    if (!stack.isEmpty())
+    {
+        backtrack();
+    }
 }
 
 void RoutePlanner::enqueueNeighbors(int province)
 {
     // TO DO: Enqueue priority & non-priority neighbors to the queue according to given constraints
+    queue.front = queue.rear = -1;
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        if (map.distanceMatrix[province][i] != 0 && map.isWithinRange(province, i, maxDistance))
+        {
+            if (isPriorityProvince(i))
+            {
+                queue.enqueuePriority(i);
+            }
+            else
+            {
+                queue.enqueue(i);
+            }
+        }
+    }
 }
 
 void RoutePlanner::backtrack()
 {
     // If you reach a dead-end province
     // TODO: Your code here
+    if (isExplorationComplete())
+    {
+        return;
+    }
+    exploreFromProvince(stack.peek());
 }
 
 bool RoutePlanner::isExplorationComplete() const
 {
     // TODO: Your code here
+    if (stack.isEmpty() && queue.isEmpty())
+    {
+        return true;
+    }
     return false;
 }
 
