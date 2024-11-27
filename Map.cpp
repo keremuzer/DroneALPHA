@@ -10,12 +10,12 @@ Map::Map()
     // Initialize all provinces as unvisited
     for (int i = 0; i < MAX_SIZE; i++)
     {
-        visited[i] = false;
         for (int j = 0; j < MAX_SIZE; j++)
         {
             distanceMatrix[i][j] = -1;
         }
     }
+    resetVisited();
 }
 
 // Loads distance data from a file and fills the distanceMatrix
@@ -61,14 +61,7 @@ void Map::markAsVisited(int province)
 bool Map::isVisited(int province) const
 {
     // TODO: Your code here
-    for (int i = 0; i < MAX_SIZE; i++)
-    {
-        if (visited[i] == true)
-        {
-            return true;
-        }
-    }
-    return false;
+    return visited[province];
 }
 
 // Resets all provinces to unvisited

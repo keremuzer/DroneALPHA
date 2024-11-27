@@ -6,6 +6,10 @@ Queue::Queue()
 {
     // TODO: Your code here
     front = rear = -1;
+    for (int i = 0; i < MAX_QUEUE_SIZE; i++)
+    {
+        data[i] = 0;
+    }
 }
 
 // Adds a province to the end of the queue
@@ -16,6 +20,7 @@ void Queue::enqueue(int province)
     // Add the province
     if ((rear + 1) % MAX_QUEUE_SIZE == front)
     {
+        std::cout << "Queue is full" << std::endl;
         return;
     }
     rear = (rear + 1) % MAX_QUEUE_SIZE;
@@ -39,7 +44,9 @@ int Queue::dequeue()
             return temp;
         }
         front = (front + 1) % MAX_QUEUE_SIZE;
+        return temp;
     }
+    std::cout << "Cannot dequeue from an empty queue" << std::endl;
     return -1;
 }
 
@@ -49,6 +56,7 @@ int Queue::peek() const
     // TODO: Your code here
     if (front == -1)
     {
+        std::cout << "Cannot peek from an empty queue" << std::endl;
         return -1;
     }
     return data[front];
@@ -72,6 +80,7 @@ void Queue::enqueuePriority(int province)
     }
     if ((front - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE == rear)
     {
+        std::cout << "Queue is full" << std::endl;
         return;
     }
     front = (front - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE;
